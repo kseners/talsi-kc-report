@@ -322,9 +322,6 @@ def build_html(events):
       <span class="mini"><strong style="color:#111827;">0</strong> nav</span>
     </div>
 
-    <div class="footer">
-      Piezīme: “Brīvas” = summēts atlikums no cenu grupām (prices[].count).
-    </div>
   </div>
 </body>
 </html>
