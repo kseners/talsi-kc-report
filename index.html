@@ -1,198 +1,427 @@
-
 <!doctype html>
 <html lang="lv">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Talsu KC biļetes</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Talsu Kultūras centrs — biļešu atskaite</title>
+  <style>
+    :root {
+      --bg1:#f4f6fb;
+      --bg2:#eaf1ff;
+      --ink:#0b1324;
+      --muted: rgba(11,19,36,.70);
+      --card:#ffffff;
+      --line: rgba(11,19,36,.10);
+      --shadow: 0 18px 45px rgba(11,19,36,.10);
+      --btn:#1d4ed8;
+      --btn2:#0f2f98;
 
-<style>
-body {
-    margin:0;
-    font-family:system-ui;
-    background:#0f172a;
-    color:white;
-}
+      --good:#22c55e;
+      --mid:#f59e0b;
+      --low:#ef4444;
+      --zero:#94a3b8;
+    }
 
-.header {
-    padding:20px;
-    text-align:center;
-}
+    *{box-sizing:border-box}
+    body {
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(800px 500px at 15% 0%, rgba(59,130,246,.22), transparent 60%),
+        radial-gradient(900px 520px at 90% 10%, rgba(14,165,233,.18), transparent 55%),
+        linear-gradient(180deg, var(--bg2), var(--bg1));
+    }
 
-.header h1 {
-    margin:0;
-    font-size:22px;
-}
+    .wrap {
+      max-width: 1080px;
+      margin: 22px auto;
+      padding: 0 14px 42px;
+    }
 
-.header p {
-    opacity:.7;
-    margin:6px 0 0;
-}
+    header {
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:14px;
+      margin-bottom: 14px;
+    }
 
-.container {
-    max-width:800px;
-    margin:auto;
-    padding:10px;
-}
+    h1 {
+      margin:0;
+      font-size: 20px;
+      letter-spacing:.2px;
+    }
+    .sub {
+      margin-top:6px;
+      color: var(--muted);
+      font-size: 13px;
+    }
 
-.card {
-    background:#1e293b;
-    border-radius:14px;
-    padding:16px;
-    margin-bottom:12px;
-}
+    .metaPill {
+      background: rgba(255,255,255,.65);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+      box-shadow: var(--shadow);
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
 
-.date {
-    font-size:13px;
-    opacity:.7;
-}
+    .grid {
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
 
-.title {
-    font-size:18px;
-    font-weight:600;
-    margin:6px 0 12px;
-}
+    .card {
+      display:grid;
+      grid-template-columns: 170px 1fr;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow:hidden;
+      box-shadow: var(--shadow);
+    }
 
-.bottom {
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
+    .thumb {
+      background-size: cover;
+      background-position: center;
+      min-height: 150px;
+    }
 
-.badge {
-    font-size:28px;
-    font-weight:800;
-    padding:10px 18px;
-    border-radius:30px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-}
+    .thumb--fallback {
+      background:
+        linear-gradient(135deg, rgba(29,78,216,.20), rgba(14,165,233,.18)),
+        linear-gradient(180deg, #0b2a66, #0b1324);
+      position:relative;
+    }
+    .thumbDate {
+      position:absolute;
+      left:14px;
+      bottom:14px;
+      color:white;
+      text-shadow: 0 6px 18px rgba(0,0,0,.35);
+      line-height:1;
+    }
+    .thumbDate .d {
+      font-size: 44px;
+      font-weight: 900;
+      letter-spacing: -.02em;
+    }
+    .thumbDate .m {
+      font-size: 16px;
+      opacity:.92;
+      font-weight: 800;
+      letter-spacing: .12em;
+    }
 
-.badge span {
-    font-size:12px;
-    font-weight:500;
-    opacity:.8;
-}
+    .body {
+      padding: 14px 14px 12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      min-width:0;
+    }
 
-.high {background:#14532d; color:#86efac;}
-.mid {background:#78350f; color:#fde68a;}
-.low {background:#7f1d1d; color:#fecaca;}
-.zero {background:#374151; color:#e5e7eb;}
+    .topline {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
 
-a {
-    background:#2563eb;
-    padding:10px 16px;
-    border-radius:10px;
-    color:white;
-    text-decoration:none;
-}
+    .dt {
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .dt .time { margin-left: 10px; }
 
-a:hover {opacity:.85}
-</style>
+    .title {
+      margin:0;
+      font-size: 16px;
+      line-height: 1.25;
+      font-weight: 800;
+      word-break: break-word;
+    }
+
+    .pill {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #0b1324;
+      background: rgba(11,19,36,.06);
+      border: 1px solid var(--line);
+      white-space: nowrap;
+    }
+    .pill.high { border-color: rgba(34,197,94,.35); background: rgba(34,197,94,.14); }
+    .pill.mid  { border-color: rgba(245,158,11,.35); background: rgba(245,158,11,.14); }
+    .pill.low  { border-color: rgba(239,68,68,.35); background: rgba(239,68,68,.14); }
+    .pill.zero { border-color: rgba(148,163,184,.45); background: rgba(148,163,184,.18); }
+
+    .progress {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .bar {
+      flex: 1;
+      min-width: 160px;
+      height: 10px;
+      background: rgba(11,19,36,.08);
+      border: 1px solid rgba(11,19,36,.10);
+      border-radius: 999px;
+      overflow:hidden;
+    }
+    .bar span {
+      display:block;
+      height:100%;
+      background: linear-gradient(90deg, rgba(34,197,94,.95), rgba(59,130,246,.95));
+      border-radius: 999px;
+    }
+    .nums {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .actions {
+      display:flex;
+      justify-content:flex-end;
+      margin-top:auto;
+    }
+    .btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 10px 14px;
+      border-radius: 12px;
+      color: white;
+      text-decoration:none;
+      font-weight: 800;
+      background: linear-gradient(180deg, var(--btn), var(--btn2));
+      box-shadow: 0 14px 30px rgba(29,78,216,.18);
+    }
+    .btn:hover { filter: brightness(1.05); }
+
+    .empty {
+      padding: 18px;
+      color: var(--muted);
+      background: rgba(255,255,255,.65);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+    }
+
+    /* MOBILE: viss redzams, nekas netiek nogriezts */
+    @media (max-width: 860px) {
+      header { flex-direction: column; align-items:flex-start; }
+      .metaPill { width: 100%; }
+      .grid { grid-template-columns: 1fr; }
+      .card { grid-template-columns: 120px 1fr; }
+      .thumb { min-height: 120px; }
+      .thumbDate .d { font-size: 36px; }
+      .title { font-size: 15px; }
+      .bar { min-width: 140px; }
+    }
+
+    @media (max-width: 420px) {
+      .card { grid-template-columns: 1fr; }
+      .thumb { min-height: 150px; }
+      .actions { justify-content: stretch; }
+      .btn { width: 100%; }
+      .dt { white-space: normal; }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Talsu Kultūras centrs — pasākumi & brīvās biļetes</h1>
+        <div class="sub">Atjaunots: <strong>2026-01-29 22:54</strong></div>
+      </div>
+      <div class="metaPill">Venue ID: <strong>270</strong> &nbsp;•&nbsp; Pasākumi: <strong>7</strong></div>
+    </header>
 
-<div class="header">
-    <h1>Talsu Kultūras centrs</h1>
-    <p>Atjaunots: 2026-01-29 22:34</p>
-</div>
-
-<div class="container">
-
-        <div class="card">
-            <div class="date">2026-01-30 19:00</div>
-            <div class="title">Nopietna komēdija “Uz visu banku!”</div>
-
-            <div class="bottom">
-                <div class="badge zero">
-                    0
-                    <span>Nav</span>
+    <section class="grid">
+      
+          <article class="card">
+            <div class="thumb thumb--fallback">
+                <div class="thumbDate">
+                  <div class="d">30</div>
+                  <div class="m">01</div>
                 </div>
-                <a href="https://www.bilesuparadize.lv/lv/event/157783" target="_blank">Atvērt</a>
-            </div>
-        </div>
-        
-        <div class="card">
-            <div class="date">2026-02-21 18:00</div>
-            <div class="title">Komēdija “Ak, šis nevainīgais blefs!”</div>
+              </div>
+            <div class="body">
+              <div class="topline">
+                <div class="dt"><span class="date">2026-01-30</span> <span class="time">19:00</span></div>
+                <span class="pill zero">0 • Nav</span>
+              </div>
 
-            <div class="bottom">
-                <div class="badge mid">
-                    189
-                    <span>Vidēji</span>
+              <h3 class="title">Nopietna komēdija “Uz visu banku!”</h3>
+
+              
+
+              <div class="actions">
+                <a class="btn" href="https://www.bilesuparadize.lv/lv/event/157783" target="_blank" rel="noopener">Atvērt</a>
+              </div>
+            </div>
+          </article>
+        
+
+          <article class="card">
+            <div class="thumb thumb--fallback">
+                <div class="thumbDate">
+                  <div class="d">21</div>
+                  <div class="m">02</div>
                 </div>
-                <a href="https://www.bilesuparadize.lv/lv/event/164644" target="_blank">Atvērt</a>
-            </div>
-        </div>
-        
-        <div class="card">
-            <div class="date">2026-03-06 19:00</div>
-            <div class="title">Koncerts “Ar dziesmu apkārt pasaulei” | Anna Dribas, Agris Ričs</div>
+              </div>
+            <div class="body">
+              <div class="topline">
+                <div class="dt"><span class="date">2026-02-21</span> <span class="time">18:00</span></div>
+                <span class="pill mid">189 • Vidēji</span>
+              </div>
 
-            <div class="bottom">
-                <div class="badge high">
-                    332
-                    <span>Daudz</span>
+              <h3 class="title">Komēdija “Ak, šis nevainīgais blefs!”</h3>
+
+              
+
+              <div class="actions">
+                <a class="btn" href="https://www.bilesuparadize.lv/lv/event/164644" target="_blank" rel="noopener">Atvērt</a>
+              </div>
+            </div>
+          </article>
+        
+
+          <article class="card">
+            <div class="thumb thumb--fallback">
+                <div class="thumbDate">
+                  <div class="d">06</div>
+                  <div class="m">03</div>
                 </div>
-                <a href="https://www.bilesuparadize.lv/lv/event/158505" target="_blank">Atvērt</a>
-            </div>
-        </div>
-        
-        <div class="card">
-            <div class="date">2026-03-14 19:00</div>
-            <div class="title">Rihards Lepers koncertuzvedums / VAIRĀK KĀ TRĪS LIETAS /</div>
+              </div>
+            <div class="body">
+              <div class="topline">
+                <div class="dt"><span class="date">2026-03-06</span> <span class="time">19:00</span></div>
+                <span class="pill high">332 • Daudz</span>
+              </div>
 
-            <div class="bottom">
-                <div class="badge high">
-                    338
-                    <span>Daudz</span>
+              <h3 class="title">Koncerts “Ar dziesmu apkārt pasaulei” | Anna Dribas, Agris Ričs</h3>
+
+              
+
+              <div class="actions">
+                <a class="btn" href="https://www.bilesuparadize.lv/lv/event/158505" target="_blank" rel="noopener">Atvērt</a>
+              </div>
+            </div>
+          </article>
+        
+
+          <article class="card">
+            <div class="thumb thumb--fallback">
+                <div class="thumbDate">
+                  <div class="d">14</div>
+                  <div class="m">03</div>
                 </div>
-                <a href="https://www.bilesuparadize.lv/lv/event/165256" target="_blank">Atvērt</a>
-            </div>
-        </div>
-        
-        <div class="card">
-            <div class="date">2026-03-20 19:00</div>
-            <div class="title">Z-Scars 25 gadu jubilejas koncerts</div>
+              </div>
+            <div class="body">
+              <div class="topline">
+                <div class="dt"><span class="date">2026-03-14</span> <span class="time">19:00</span></div>
+                <span class="pill high">338 • Daudz</span>
+              </div>
 
-            <div class="bottom">
-                <div class="badge high">
-                    290
-                    <span>Daudz</span>
+              <h3 class="title">Rihards Lepers koncertuzvedums / VAIRĀK KĀ TRĪS LIETAS /</h3>
+
+              
+
+              <div class="actions">
+                <a class="btn" href="https://www.bilesuparadize.lv/lv/event/165256" target="_blank" rel="noopener">Atvērt</a>
+              </div>
+            </div>
+          </article>
+        
+
+          <article class="card">
+            <div class="thumb thumb--fallback">
+                <div class="thumbDate">
+                  <div class="d">20</div>
+                  <div class="m">03</div>
                 </div>
-                <a href="https://www.bilesuparadize.lv/lv/event/155918" target="_blank">Atvērt</a>
-            </div>
-        </div>
-        
-        <div class="card">
-            <div class="date">2026-04-09 19:00</div>
-            <div class="title">Komēdija TRAKI LABA DIENA</div>
+              </div>
+            <div class="body">
+              <div class="topline">
+                <div class="dt"><span class="date">2026-03-20</span> <span class="time">19:00</span></div>
+                <span class="pill high">290 • Daudz</span>
+              </div>
 
-            <div class="bottom">
-                <div class="badge high">
-                    366
-                    <span>Daudz</span>
+              <h3 class="title">Z-Scars 25 gadu jubilejas koncerts</h3>
+
+              
+
+              <div class="actions">
+                <a class="btn" href="https://www.bilesuparadize.lv/lv/event/155918" target="_blank" rel="noopener">Atvērt</a>
+              </div>
+            </div>
+          </article>
+        
+
+          <article class="card">
+            <div class="thumb thumb--fallback">
+                <div class="thumbDate">
+                  <div class="d">09</div>
+                  <div class="m">04</div>
                 </div>
-                <a href="https://www.bilesuparadize.lv/lv/event/165512" target="_blank">Atvērt</a>
-            </div>
-        </div>
-        
-        <div class="card">
-            <div class="date">2026-04-17 19:00</div>
-            <div class="title">ANDRIS BĒRZIŅŠ solokoncertā “SVĒTVAKARS”</div>
+              </div>
+            <div class="body">
+              <div class="topline">
+                <div class="dt"><span class="date">2026-04-09</span> <span class="time">19:00</span></div>
+                <span class="pill high">366 • Daudz</span>
+              </div>
 
-            <div class="bottom">
-                <div class="badge high">
-                    352
-                    <span>Daudz</span>
+              <h3 class="title">Komēdija TRAKI LABA DIENA</h3>
+
+              
+
+              <div class="actions">
+                <a class="btn" href="https://www.bilesuparadize.lv/lv/event/165512" target="_blank" rel="noopener">Atvērt</a>
+              </div>
+            </div>
+          </article>
+        
+
+          <article class="card">
+            <div class="thumb thumb--fallback">
+                <div class="thumbDate">
+                  <div class="d">17</div>
+                  <div class="m">04</div>
                 </div>
-                <a href="https://www.bilesuparadize.lv/lv/event/164692" target="_blank">Atvērt</a>
-            </div>
-        </div>
-        
-</div>
+              </div>
+            <div class="body">
+              <div class="topline">
+                <div class="dt"><span class="date">2026-04-17</span> <span class="time">19:00</span></div>
+                <span class="pill high">352 • Daudz</span>
+              </div>
 
+              <h3 class="title">ANDRIS BĒRZIŅŠ solokoncertā “SVĒTVAKARS”</h3>
+
+              
+
+              <div class="actions">
+                <a class="btn" href="https://www.bilesuparadize.lv/lv/event/164692" target="_blank" rel="noopener">Atvērt</a>
+              </div>
+            </div>
+          </article>
+        
+    </section>
+  </div>
 </body>
 </html>
