@@ -208,11 +208,12 @@ img {
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(25, 32, 72, 0.08);
   border: 1px solid var(--border);
+  align-items: stretch;
 }
 
 .event-media {
   background: #d9deef;
-  aspect-ratio: 4 / 3;
+  height: 100%;
   border-radius: 12px;
   overflow: hidden;
 }
@@ -239,7 +240,12 @@ img {
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+}
+
+.event-info {
+  flex: 1;
+  min-width: 0;
 }
 
 .event-info h2 {
@@ -251,6 +257,7 @@ img {
   display: grid;
   gap: 0.5rem;
   min-width: 160px;
+  flex-shrink: 0;
 }
 
 .ticket-block {
@@ -337,7 +344,7 @@ img {
   }
 
   .event-media {
-    aspect-ratio: 16 / 9;
+    height: auto;
   }
 
   .event-header {
