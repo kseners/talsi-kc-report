@@ -66,7 +66,7 @@ const renderEventCard = (event: Event): string => {
         }
         <div class="card-actions">
           <a class="btn" href="${link}" target="_blank" rel="noreferrer">
-            Pirkt biļetes
+            Atvērt
           </a>
         </div>
       </div>
@@ -326,3 +326,4 @@ generateSite().catch((error) => {
   console.error(error);
   process.exitCode = 1;
 });
+
