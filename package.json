@@ -1,0 +1,20 @@
+{
+  "name": "talsu-kulturas-centrs-events",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "fetch": "tsx scripts/fetchEvents.ts",
+    "generate": "tsx scripts/generateSite.ts",
+    "build": "tsx scripts/generateSite.ts"
+  },
+  "dependencies": {
+    "playwright": "^1.50.1",
+    "playwright-extra": "^4.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}
