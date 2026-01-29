@@ -20,13 +20,17 @@ jobs:
         with:
           python-version: "3.11"
 
-      - run: pip install -r requirements.txt
+      - name: Install deps
+        run: pip install -r requirements.txt
 
-      - run: python bilesu_talsi_html.py
+      - name: Generate index.html
+        run: python bilesu_talsi_html.py
 
-      - run: |
+      - name: Commit and push changes
+        run: |
           git config user.name "bot"
           git config user.email "bot@github.com"
-          git add .
-          git commit -m "update" || echo "no change"
+          git add index.html
+          git commit -m "update report" || echo "no change"
+          git pull --rebase origin main || true
           git push
