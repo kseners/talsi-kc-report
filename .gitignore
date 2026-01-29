@@ -1,0 +1,34 @@
+node_modules/
+dist/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+pip-wheel-metadata/
+*.egg-info/
+*.egg
+.pytest_cache/
+.mypy_cache/
+
+# Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
