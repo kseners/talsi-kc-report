@@ -34,12 +34,10 @@ const escapeHtml = (value: string): string =>
     .replaceAll("'", "&#39;");
 
 const renderEventCard = (event: Event): string => {
-  const ticketLabel =
-    event.remainingTickets > 0
-      ? `${event.remainingTickets} pieejamas biļetes`
-      : "Izpārdots";
-  const ticketClass =
-    event.remainingTickets > 0 ? "ticket-count" : "ticket-count sold-out";
+  const hasTickets = event.remainingTickets > 0;
+  const ticketValue = hasTickets ? String(event.remainingTickets) : "0";
+  const ticketLabel = hasTickets ? "pieejamas biļetes" : "Izpārdots";
+  const ticketClass = hasTickets ? "ticket-block" : "ticket-block sold-out";
   const link = `https://www.bilesuparadize.lv/lv/event/${event.id}`;
   const locationParts = [event.address, event.city].filter(Boolean).join(", ");
   const imageBlock = event.imageUrl
@@ -49,25 +47,32 @@ const renderEventCard = (event: Event): string => {
     : `<div class="image-fallback" aria-hidden="true"></div>`;
 
   return `
-    <article class="card">
-      <div class="card-media">
+    <article class="event-row">
+      <div class="event-media">
         ${imageBlock}
       </div>
-      <div class="card-body">
-        <div class="card-header">
-          <h2>${escapeHtml(event.title)}</h2>
-          <span class="${ticketClass}">${ticketLabel}</span>
-        </div>
-        <p class="event-date">${formatDate(event.startDateTime)}</p>
-        ${
-          locationParts
-            ? `<p class="event-location">${escapeHtml(locationParts)}</p>`
-            : ""
-        }
-        <div class="card-actions">
-          <a class="btn" href="${link}" target="_blank" rel="noreferrer">
-            Atvērt
-          </a>
+      <div class="event-content">
+        <div class="event-header">
+          <div class="event-info">
+            <h2>${escapeHtml(event.title)}</h2>
+            <p class="event-date">${formatDate(event.startDateTime)}</p>
+            ${
+              locationParts
+                ? `<p class="event-location">${escapeHtml(locationParts)}</p>`
+                : ""
+            }
+          </div>
+          <div class="ticket-stack">
+            <div class="${ticketClass}">
+              <span class="ticket-value">${ticketValue}</span>
+              <span class="ticket-label">${ticketLabel}</span>
+            </div>
+            <div class="ticket-actions">
+              <a class="btn" href="${link}" target="_blank" rel="noreferrer">
+                Skatīt
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </article>
@@ -190,26 +195,29 @@ img {
 
 .events-grid {
   display: grid;
-  gap: 1.5rem;
+  gap: 1rem;
   margin: -2.5rem auto 3rem;
 }
 
-.card {
+.event-row {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 140px) minmax(0, 1fr);
+  gap: 1.25rem;
+  padding: 1.25rem;
   background: var(--card);
-  border-radius: 20px;
-  overflow: hidden;
+  border-radius: 16px;
   box-shadow: 0 10px 30px rgba(25, 32, 72, 0.08);
   border: 1px solid var(--border);
 }
 
-.card-media {
+.event-media {
   background: #d9deef;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
-.card-media img {
+.event-media img {
   height: 100%;
   width: 100%;
   object-fit: cover;
@@ -221,35 +229,59 @@ img {
   background: linear-gradient(135deg, #cfd6f5, #eef1fb);
 }
 
-.card-body {
-  padding: 1.5rem;
+.event-content {
   display: grid;
   gap: 0.75rem;
 }
 
-.card-header {
+.event-header {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
-.card-header h2 {
+.event-info h2 {
   margin: 0;
   font-size: 1.35rem;
 }
 
-.ticket-count {
-  display: inline-flex;
-  align-self: flex-start;
-  padding: 0.25rem 0.75rem;
-  border-radius: 999px;
+.ticket-stack {
+  display: grid;
+  gap: 0.5rem;
+  min-width: 160px;
+}
+
+.ticket-block {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.6rem 0.85rem;
+  border-radius: 12px;
   background: rgba(31, 139, 76, 0.12);
   color: var(--success);
+  text-align: center;
+}
+
+.ticket-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.ticket-label {
+  font-size: 0.85rem;
   font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.ticket-actions .btn {
+  width: 100%;
+  padding: 0.5rem 0.9rem;
   font-size: 0.9rem;
 }
 
-.ticket-count.sold-out {
+.ticket-block.sold-out {
   background: rgba(204, 42, 42, 0.12);
   color: var(--danger);
 }
@@ -260,8 +292,10 @@ img {
   color: var(--muted);
 }
 
-.card-actions {
+.event-actions {
   margin-top: 0.5rem;
+  display: flex;
+  justify-content: flex-start;
 }
 
 .btn {
@@ -297,19 +331,27 @@ img {
   font-size: 0.9rem;
 }
 
-@media (min-width: 768px) {
-  .events-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .card {
+@media (max-width: 640px) {
+  .event-row {
     grid-template-columns: 1fr;
   }
-}
 
-@media (min-width: 1024px) {
-  .events-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .event-media {
+    aspect-ratio: 16 / 9;
+  }
+
+  .event-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ticket-stack {
+    width: 100%;
+    text-align: left;
+  }
+
+  .ticket-actions .btn {
+    width: 100%;
   }
 }
 `;
