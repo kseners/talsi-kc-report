@@ -107,9 +107,6 @@ const renderHtml = (events: Event[], updatedAt: Date): string => {
       <div class="container">
         <p class="venue-label">Talsu Kultūras centrs</p>
         <h1>Aktuālie pasākumi</h1>
-        <p class="hero-subtitle">
-          Skatiet, cik biļetes vēl ir pieejamas, un dodieties uz pirkšanu.
-        </p>
         <p class="updated-at">Atjaunots: ${formatUpdated(updatedAt)}</p>
       </div>
     </header>
