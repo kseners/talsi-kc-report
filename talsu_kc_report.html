@@ -1,61 +1,401 @@
+<!doctype html>
+<html lang="lv">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Talsu KC — biļešu atskaite</title>
+  <meta name="color-scheme" content="dark light" />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.04);
+      --text: #eaf0ff;
+      --muted: rgba(234,240,255,.72);
+      --line: rgba(255,255,255,.10);
+      --shadow: 0 22px 70px rgba(0,0,0,.40);
+      --link: #8fd0ff;
 
-    <html>
-    <body style="font-family:Arial">
-    <h2>Talsu KC biļetes</h2>
-    <p>Atjaunots: 2026-01-29 21:16</p>
-    <table border="1" cellpadding="5">
-    <tr><th>Datums</th><th>Pasākums</th><th>Brīvas</th><th>Saite</th></tr>
-    
-        <tr>
-        <td>2026-01-30 19:00</td>
-        <td>Nopietna komēdija “Uz visu banku!”</td>
-        <td>0</td>
-        <td><a href='https://www.bilesuparadize.lv/lv/event/157783' target='_blank'>Link</a></td>
-        </tr>
+      --good: rgba(34,197,94,.20);
+      --good-b: rgba(34,197,94,.55);
+      --good-t: #b7f7cf;
+
+      --mid: rgba(245,158,11,.22);
+      --mid-b: rgba(245,158,11,.55);
+      --mid-t: #ffe3b2;
+
+      --low: rgba(239,68,68,.22);
+      --low-b: rgba(239,68,68,.55);
+      --low-t: #ffd0d0;
+
+      --zero: rgba(148,163,184,.18);
+      --zero-b: rgba(148,163,184,.45);
+      --zero-t: #e2e8f0;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f4f6fb;
+        --card: rgba(10,20,40,.06);
+        --card2: rgba(10,20,40,.04);
+        --text: #0c1222;
+        --muted: rgba(12,18,34,.72);
+        --line: rgba(12,18,34,.12);
+        --shadow: 0 22px 70px rgba(10,20,40,.12);
+        --link: #0066cc;
+      }
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(900px 500px at 18% 0%, rgba(99,102,241,.22), transparent 60%),
+        radial-gradient(900px 500px at 85% 10%, rgba(14,165,233,.18), transparent 55%),
+        var(--bg);
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 1160px;
+      margin: 26px auto;
+      padding: 0 16px 40px;
+    }
+
+    .top {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: end;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: .2px;
+    }
+
+    .meta {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .right {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .pill {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 8px 10px;
+      box-shadow: var(--shadow);
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .search {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 8px 10px;
+      box-shadow: var(--shadow);
+      min-width: 280px;
+    }
+    .search input {
+      width: 100%;
+      border: 0;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 14px;
+    }
+    .search input::placeholder {
+      color: var(--muted);
+    }
+
+    .card {
+      background: var(--card2);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      text-align: left;
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: rgba(0,0,0,.20);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+      padding: 12px 12px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    tbody td {
+      border-bottom: 1px solid var(--line);
+      padding: 12px 12px;
+      vertical-align: middle;
+      font-size: 14px;
+    }
+
+    tbody tr:hover {
+      background: rgba(255,255,255,.04);
+    }
+
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .title a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 650;
+    }
+    .title a:hover {
+      text-decoration: underline;
+    }
+
+    .badge {
+      display: inline-flex;
+      min-width: 64px;
+      justify-content: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid;
+      font-weight: 800;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+    .badge.high { background: var(--good); border-color: var(--good-b); color: var(--good-t); }
+    .badge.mid  { background: var(--mid);  border-color: var(--mid-b);  color: var(--mid-t);  }
+    .badge.low  { background: var(--low);  border-color: var(--low-b);  color: var(--low-t);  }
+    .badge.zero { background: var(--zero); border-color: var(--zero-b); color: var(--zero-t); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      color: var(--link);
+      text-decoration: none;
+      font-weight: 650;
+      font-size: 13px;
+    }
+    .btn:hover {
+      background: rgba(255,255,255,.10);
+    }
+
+    .empty {
+      color: var(--muted);
+      text-align: center;
+      padding: 28px 12px;
+    }
+
+    @media (max-width: 720px) {
+      .top { grid-template-columns: 1fr; }
+      .right { justify-content: flex-start; }
+      thead th:nth-child(5), tbody td:nth-child(5) { display:none; }
+      .search { min-width: 0; width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <h1>Talsu Kultūras centrs — pasākumi & brīvās biļetes</h1>
+        <div class="meta">Atjaunots: <strong>2026-01-29 21:40</strong></div>
+      </div>
+
+      <div class="right">
+        <div class="search">
+          🔎 <input id="q" placeholder="Meklēt pasākumu…" autocomplete="off" />
+        </div>
+        <div class="pill">Venue ID: <strong>270</strong> &nbsp;•&nbsp; Pasākumi: <strong id="cnt">7</strong></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <table>
+        <thead>
+          <tr>
+            <th data-sort="date" style="width:120px">Datums</th>
+            <th data-sort="time" style="width:90px">Laiks</th>
+            <th data-sort="title">Pasākums</th>
+            <th data-sort="free" style="width:140px">Brīvas</th>
+            <th style="width:110px">Saite</th>
+          </tr>
+        </thead>
+        <tbody id="tb">
+          
+          <tr data-title="nopietna komēdija “uz visu banku!”" data-date="2026-01-30" data-free="0">
+            <td class="mono">2026-01-30</td>
+            <td class="mono">19:00</td>
+            <td class="title">
+              <a href="https://www.bilesuparadize.lv/lv/event/157783" target="_blank" rel="noopener">Nopietna komēdija “Uz visu banku!”</a>
+            </td>
+            <td class="free"><span class="badge zero">0</span></td>
+            <td class="open"><a class="btn" href="https://www.bilesuparadize.lv/lv/event/157783" target="_blank" rel="noopener">Atvērt</a></td>
+          </tr>
         
-        <tr>
-        <td>2026-02-21 18:00</td>
-        <td>Komēdija “Ak, šis nevainīgais blefs!”</td>
-        <td>189</td>
-        <td><a href='https://www.bilesuparadize.lv/lv/event/164644' target='_blank'>Link</a></td>
-        </tr>
+
+          <tr data-title="komēdija “ak, šis nevainīgais blefs!”" data-date="2026-02-21" data-free="189">
+            <td class="mono">2026-02-21</td>
+            <td class="mono">18:00</td>
+            <td class="title">
+              <a href="https://www.bilesuparadize.lv/lv/event/164644" target="_blank" rel="noopener">Komēdija “Ak, šis nevainīgais blefs!”</a>
+            </td>
+            <td class="free"><span class="badge mid">189</span></td>
+            <td class="open"><a class="btn" href="https://www.bilesuparadize.lv/lv/event/164644" target="_blank" rel="noopener">Atvērt</a></td>
+          </tr>
         
-        <tr>
-        <td>2026-03-06 19:00</td>
-        <td>Koncerts “Ar dziesmu apkārt pasaulei” | Anna Dribas, Agris Ričs</td>
-        <td>332</td>
-        <td><a href='https://www.bilesuparadize.lv/lv/event/158505' target='_blank'>Link</a></td>
-        </tr>
+
+          <tr data-title="koncerts “ar dziesmu apkārt pasaulei” | anna dribas, agris ričs" data-date="2026-03-06" data-free="332">
+            <td class="mono">2026-03-06</td>
+            <td class="mono">19:00</td>
+            <td class="title">
+              <a href="https://www.bilesuparadize.lv/lv/event/158505" target="_blank" rel="noopener">Koncerts “Ar dziesmu apkārt pasaulei” | Anna Dribas, Agris Ričs</a>
+            </td>
+            <td class="free"><span class="badge high">332</span></td>
+            <td class="open"><a class="btn" href="https://www.bilesuparadize.lv/lv/event/158505" target="_blank" rel="noopener">Atvērt</a></td>
+          </tr>
         
-        <tr>
-        <td>2026-03-14 19:00</td>
-        <td>Rihards Lepers koncertuzvedums / VAIRĀK KĀ TRĪS LIETAS /</td>
-        <td>338</td>
-        <td><a href='https://www.bilesuparadize.lv/lv/event/165256' target='_blank'>Link</a></td>
-        </tr>
+
+          <tr data-title="rihards lepers koncertuzvedums / vairāk kā trīs lietas /" data-date="2026-03-14" data-free="338">
+            <td class="mono">2026-03-14</td>
+            <td class="mono">19:00</td>
+            <td class="title">
+              <a href="https://www.bilesuparadize.lv/lv/event/165256" target="_blank" rel="noopener">Rihards Lepers koncertuzvedums / VAIRĀK KĀ TRĪS LIETAS /</a>
+            </td>
+            <td class="free"><span class="badge high">338</span></td>
+            <td class="open"><a class="btn" href="https://www.bilesuparadize.lv/lv/event/165256" target="_blank" rel="noopener">Atvērt</a></td>
+          </tr>
         
-        <tr>
-        <td>2026-03-20 19:00</td>
-        <td>Z-Scars 25 gadu jubilejas koncerts</td>
-        <td>290</td>
-        <td><a href='https://www.bilesuparadize.lv/lv/event/155918' target='_blank'>Link</a></td>
-        </tr>
+
+          <tr data-title="z-scars 25 gadu jubilejas koncerts" data-date="2026-03-20" data-free="290">
+            <td class="mono">2026-03-20</td>
+            <td class="mono">19:00</td>
+            <td class="title">
+              <a href="https://www.bilesuparadize.lv/lv/event/155918" target="_blank" rel="noopener">Z-Scars 25 gadu jubilejas koncerts</a>
+            </td>
+            <td class="free"><span class="badge high">290</span></td>
+            <td class="open"><a class="btn" href="https://www.bilesuparadize.lv/lv/event/155918" target="_blank" rel="noopener">Atvērt</a></td>
+          </tr>
         
-        <tr>
-        <td>2026-04-09 19:00</td>
-        <td>Komēdija TRAKI LABA DIENA</td>
-        <td>366</td>
-        <td><a href='https://www.bilesuparadize.lv/lv/event/165512' target='_blank'>Link</a></td>
-        </tr>
+
+          <tr data-title="komēdija traki laba diena" data-date="2026-04-09" data-free="366">
+            <td class="mono">2026-04-09</td>
+            <td class="mono">19:00</td>
+            <td class="title">
+              <a href="https://www.bilesuparadize.lv/lv/event/165512" target="_blank" rel="noopener">Komēdija TRAKI LABA DIENA</a>
+            </td>
+            <td class="free"><span class="badge high">366</span></td>
+            <td class="open"><a class="btn" href="https://www.bilesuparadize.lv/lv/event/165512" target="_blank" rel="noopener">Atvērt</a></td>
+          </tr>
         
-        <tr>
-        <td>2026-04-17 19:00</td>
-        <td>ANDRIS BĒRZIŅŠ solokoncertā “SVĒTVAKARS”</td>
-        <td>352</td>
-        <td><a href='https://www.bilesuparadize.lv/lv/event/164692' target='_blank'>Link</a></td>
-        </tr>
+
+          <tr data-title="andris bērziņš solokoncertā “svētvakars”" data-date="2026-04-17" data-free="352">
+            <td class="mono">2026-04-17</td>
+            <td class="mono">19:00</td>
+            <td class="title">
+              <a href="https://www.bilesuparadize.lv/lv/event/164692" target="_blank" rel="noopener">ANDRIS BĒRZIŅŠ solokoncertā “SVĒTVAKARS”</a>
+            </td>
+            <td class="free"><span class="badge high">352</span></td>
+            <td class="open"><a class="btn" href="https://www.bilesuparadize.lv/lv/event/164692" target="_blank" rel="noopener">Atvērt</a></td>
+          </tr>
         
-    </table>
-    </body>
-    </html>
-    
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const q = document.getElementById('q');
+    const tb = document.getElementById('tb');
+    const cnt = document.getElementById('cnt');
+    const headers = Array.from(document.querySelectorAll('thead th[data-sort]'));
+    let dir = 1;
+    let sortKey = 'date';
+
+    function rows() {
+      return Array.from(tb.querySelectorAll('tr'));
+    }
+
+    function applyFilter() {
+      const term = (q.value || '').trim().toLowerCase();
+      let visible = 0;
+      rows().forEach(r => {
+        const title = r.getAttribute('data-title') || '';
+        const show = !term || title.includes(term);
+        r.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      cnt.textContent = visible;
+    }
+
+    function getSortVal(r, key) {
+      if (key === 'free') return parseInt(r.getAttribute('data-free') || '0', 10);
+      if (key === 'title') return (r.getAttribute('data-title') || '');
+      if (key === 'time') return r.children[1].innerText.trim();
+      return r.getAttribute('data-date') || '';
+    }
+
+    function sortTable(key) {
+      sortKey = key;
+      const rs = rows();
+      rs.sort((a,b) => {
+        const va = getSortVal(a, key);
+        const vb = getSortVal(b, key);
+        if (va < vb) return -1 * dir;
+        if (va > vb) return  1 * dir;
+        return 0;
+      });
+      rs.forEach(r => tb.appendChild(r));
+    }
+
+    headers.forEach(h => {
+      h.addEventListener('click', () => {
+        const key = h.getAttribute('data-sort');
+        if (sortKey === key) dir *= -1; else dir = 1;
+        sortTable(key);
+        applyFilter();
+      });
+    });
+
+    q.addEventListener('input', applyFilter);
+
+    sortTable('date');
+    applyFilter();
+  </script>
+</body>
+</html>
